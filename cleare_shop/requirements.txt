@@ -23,5 +23,7 @@ protobuf
 grpcio
 whitenoise
 
+psycopg2-binary
+
 
 

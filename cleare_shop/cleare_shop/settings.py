@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 from dotenv import load_dotenv
+import dj_database_url
+
 
 load_dotenv()
 from pathlib import Path
@@ -28,7 +30,7 @@ DEBUG = os.getenv('DEBUG') == 'True'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -80,15 +82,12 @@ WSGI_APPLICATION = 'cleare_shop.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB'),    
-        'USER': os.getenv('POSTGRES_USER'),   
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'), 
-        'HOST': os.getenv('POSTGRES_HOST'),  
-        'PORT': os.getenv('POSTGRES_PORT', '5432'), 
-    }
+    'default': dj_database_url.config(
+        default='postgresql://postgres:postgres@localhost:5432/cleare_shop',
+        conn_max_age=600
+    )
 }
+
 
 
 
@@ -129,7 +128,7 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'  
-STATICFILES_DIRS = [BASE_DIR / 'cleare_shop_app/static']  
+STATICFILES_DIRS = [BASE_DIR / 'cleare_shop_app/static'] if DEBUG else []
 STATIC_ROOT = BASE_DIR / 'staticfiles'  
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 

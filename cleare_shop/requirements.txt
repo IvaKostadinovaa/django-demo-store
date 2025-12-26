@@ -21,4 +21,7 @@ openai
 
 protobuf
 grpcio
+whitenoise
+
+
 

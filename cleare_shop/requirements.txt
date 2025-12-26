@@ -1,5 +1,6 @@
 flask
 gunicorn
+Django>=4.2
 
 numpy
 pandas
@@ -20,3 +21,4 @@ openai
 
 protobuf
 grpcio
+

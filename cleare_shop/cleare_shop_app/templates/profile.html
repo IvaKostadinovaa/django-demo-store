@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <style>
+.cleare-sidebar-card {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.cleare-sidebar-card .list-group-item {
+    background-color: transparent !important;
+    border: none !important;
+    padding-left: 0;
+    color: #6d8c5d;
+}
+
+.cleare-sidebar-active {
+    font-weight: bold;
+    color: #3f4e3f !important;
+}
+
+.cleare-sidebar-link:hover {
+    background-color: rgba(109, 140, 93, 0.1) !important;
+    border-radius: 10px;
+}
+    </style>
+
+<div class="row pt-3 pb-5">
+
+    <div class="col-lg-3 col-md-4 mb-4">
+        <div class="card cleare-sidebar-card p-3">
+            <div class="list-group list-group-flush">
+
+                <a href="{% url 'profile' %}" class="list-group-item list-group-item-action cleare-sidebar-active">
+                    <i class="fas fa-user me-3"></i> Personal Details
+                </a>
+
+                <a href="{% url 'orders' %}" class="list-group-item list-group-item-action cleare-sidebar-link">
+                    <i class="fas fa-box-open me-3"></i> Your Orders
+                </a>
+
+              <form action="{% url 'logout' %}" method="post" style="display: inline; width: 100%;">
+    {% csrf_token %}
+    <button type="submit" class="list-group-item list-group-item-action cleare-sidebar-link text-danger mt-2"
+            style="background: none; border: none; text-align: left; width: 100%;">
+        <i class="fas fa-sign-out-alt me-3"></i> Log out
+    </button>
+</form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9 col-md-8">
+        <h2 class="cleare-hero-title mb-4">Your Profile</h2>
+
+        <div class="card cleare-details-card p-4">
+
+            <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                <img src="{% static 'user_photo.png' %}" alt="Avatar" class="rounded-circle me-3" style="width: 60px; height: 60px; border: 2px solid #556b2f;">
+                <h5 class="mb-0 cleare-text-color">{{ request.user.get_full_name|default:request.user.username }}</h5>
+                <a href="{% url 'profile_edit' %}" class="btn btn-sm btn-outline-secondary ms-auto cleare-edit-btn">Edit</a>
+            </div>
+
+            <form method="POST" action="{% url 'profile' %}">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label cleare-form-label">Full Name</label>
+                    <input type="text" class="form-control cleare-input" value="{{ request.user.get_full_name|default:'Violet Bloom' }}" disabled>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label cleare-form-label">Email</label>
+                    <input type="email" class="form-control cleare-input" value="{{ request.user.email }}" disabled>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label cleare-form-label">Password</label>
+                    <input type="password" class="form-control cleare-input" value="********" disabled>
+                </div>
+
+                <hr class="my-4">
+
+                <h6 class="cleare-text-color mb-3">Delivery Address</h6>
+                <div class="mb-3">
+                     <input type="text" class="form-control cleare-input" value="{{ shipping_address|default:'Address line 1' }}" disabled>
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control cleare-input" value="{{ shipping_city|default:'Skopje, Macedonia' }}" disabled>
+                </div>
+
+                <h6 class="cleare-text-color mt-4 mb-3">Card Information</h6>
+                <p class="text-muted small">No card information saved.</p>
+
+                </form>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

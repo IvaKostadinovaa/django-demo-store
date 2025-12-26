@@ -1,0 +1,153 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="row align-items-center my-5 py-4">
+    <div class="col-md-6 mb-4 mb-md-0">
+<h1 style="margin: 0 0 15px 0; line-height: 1.15; font-weight: 500; font-size: 2rem; color: #000000; letter-spacing: -0.2px;">
+        Let Cléaré Help You <br> Look Your Best.
+    </h1>        <p class="mt-4 mb-4 pe-md-5 cleare-text-color">
+            Cléaré is a modern skincare brand built on transparency and purity. We aim to create clean, effective and gentle formulas that support skin health. We are 100% committed to cruelty-free steps and natural ingredients.
+        </p>
+        <a href="{% url 'products' %}" class="btn btn-cleare">
+            See Our Products
+        </a>
+    </div>
+    <div class="col-md-6">
+        <img src="{% static 'home_img_1.png' %}" class="img-fluid rounded cleare-img-small " alt="Woman applying cream to her face">
+    </div>
+</section>
+
+<section class="row align-items-center my-5 py-5">
+    <div class="col-md-6 order-md-1">
+        <img src="{% static 'home_img_2.png' %}" class="img-fluid rounded cleare-img-small" alt="Woman cleansing her face">
+    </div>
+    <div class="col-md-6 order-md-2 mt-4 mt-md-0">
+     <div style="background-color: #fdfaf1; padding: 40px; font-family: 'Didot', 'Bodoni MT', 'Cormorant Garamond', serif;">
+    <h2 style="margin: 0; line-height: 1.1; font-weight: 400; font-size: 3rem; color: #000000; text-transform: uppercase; letter-spacing: -1px;">
+        TAKE the <br>
+        <span style="color: #6b7e52; font-weight: 900;">SKIN TEST</span> <br>
+        <span style="font-size: 2.8rem;">and GET</span>
+        <span style="color: #a3b18a; font-weight: 400;">EXPERT</span> <br>
+        <span style="color: #6b7e52; font-weight: 900;">RECOMMENDATIONS</span>
+    </h2>
+           <a href="{% url 'skin_test' %}" class="btn btn-cleare mt-4">
+            Start the test
+        </a>
+</div>
+
+    </div>
+</section>
+<section class="row my-5 py-5" style="background-color: #fdfaf1;">
+    <div class="col-md-4 d-flex align-items-start mb-4 mb-md-0 px-4">
+        <i class="far fa-star fa-2x mt-1 me-3" style="color: #6b7e52;"></i>
+        <div>
+            <h5 style="color: #444444; font-weight: 700; font-size: 1.1rem; margin-bottom: 5px;">Natural & High-Quality Products</h5>
+            <p style="color: #6b7e52; font-size: 0.95rem; line-height: 1.4;">Premium products with high-quality natural ingredients.</p>
+        </div>
+    </div>
+
+    <div class="col-md-4 d-flex align-items-start mb-4 mb-md-0 px-4">
+        <i class="far fa-id-badge fa-2x mt-1 me-3" style="color: #6b7e52;"></i>
+        <div>
+            <h5 style="color: #444444; font-weight: 700; font-size: 1.1rem; margin-bottom: 5px;">Loyalty Program</h5>
+            <p style="color: #6b7e52; font-size: 0.95rem; line-height: 1.4;">Registered users receive exclusive discounts and rewards.</p>
+        </div>
+    </div>
+
+    <div class="col-md-4 d-flex align-items-start px-4">
+        <i class="fas fa-box-open fa-2x mt-1 me-3" style="color: #6b7e52;"></i>
+        <div>
+            <h5 style="color: #444444; font-weight: 700; font-size: 1.1rem; margin-bottom: 5px;">Free Shipping</h5>
+            <p style="color: #6b7e52; font-size: 0.95rem; line-height: 1.4;">Order over 1500 MKD and shipping is on us!</p>
+        </div>
+    </div>
+</section>
+
+<section class="my-5 py-5">
+    <h2 class="text-center faq-title">Frequently ask questions</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="accordion" id="faqAccordionLeft">
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class=" text-dark accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            How long does delivery take?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class=" accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordionLeft">
+                        <div style="color: #6b7e52;" class="accordion-body">
+                          Orders over 1500 MKD receive free standard delivery.
+                           Delivery is available every working hour (9 AM – 5 PM).
+                           <br>
+                            Express delivery: 3–5 days
+                            <br>
+Standard delivery: 5–7 days
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class=" text-dark accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Do you ship internationally?
+                        </button>
+                    </h2>
+                    <div  style="color: #6b7e52;" id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordionLeft">
+                        <div class="accordion-body ">
+Currently, we only offer national shipping. However, expanding our delivery services beyond national borders is a key part of our future growth strategy! </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mt-3 mt-md-0">
+            <div class="accordion" id="faqAccordionRight">
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="text-dark accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            How does the personalized routine work?
+                        </button>
+                    </h2>
+                    <div  id="collapseThree" class="  accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordionRight">
+                        <div style="color: #6b7e52;"  class="accordion-body ">
+                            You start by taking our free online skin test. Based on your answers about your skin type and concerns, we provide you with a customized routine and product recommendations.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFour">
+                        <button class=" text-dark accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+ Do you offer a loyalty program?
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordionRight">
+                        <div style="color: #6b7e52;"  class="accordion-body ">
+Absolutely! Registered users automatically join our Loyalty Program, where you can earn points with every purchase and unlock exclusive additional discounts.                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFive">
+                        <button class=" text-dark accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                            Are your products 100% natural and safe?
+                        </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordionRight">
+                        <div style="color: #6b7e52;"  class="accordion-body ">
+                            Our products contain a high percentage of natural ingredients and are formulated to be safe and gentle for all skin types. We are cruelty-free.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

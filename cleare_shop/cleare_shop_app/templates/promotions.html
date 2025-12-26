@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+
+    .wishlist-icon {
+        position: absolute;
+        top: 25px !important;
+        right: 25px !important;
+
+        z-index: 10;
+        font-size: 1.3rem;
+        color: #b5b5b5;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        background: transparent;
+        border: none;
+    }
+
+    .wishlist-icon:hover {
+        color: #CC857F;
+        transform: scale(1.1);
+    }
+.wishlist-btn.active {
+    color: #CC857F !important;
+    font-weight: 900;
+}
+
+
+
+    .promo-decor-wrap { position: relative; display: inline-block; }
+
+
+    .scrolling-wrapper {
+        background: #b8c5b0;
+        color: white;
+        padding: 12px 0;
+        white-space: nowrap;
+        overflow: hidden;
+        font-weight: bold;
+    }
+    .scrolling-content {
+        display: inline-block;
+        animation: marquee 25s linear infinite;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+    @keyframes marquee {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+    }
+
+    .btn-rounded { border-radius: 25px; padding: 10px 30px; font-weight: 500; text-decoration: none; }
+    .price-old { text-decoration: line-through; color: #888; font-size: 0.9rem; }
+    .price-new { color: #880916; font-weight: bold; }
+</style>
+
+<div class="text-center py-4">
+    <h5 style="color: #6d8c5d; font-weight: bold; font-size: 2.5rem;">Current Deals & Promotions</h5>
+    <p class="small text-muted">📦 FREE SHIPPING on orders over 1500 MKD!</p>
+</div>
+
+<div class="scrolling-wrapper mb-5">
+    <div class="scrolling-content">
+        SEASONAL SALE UP TO 50% • SEASONAL SALE UP TO 50% • SEASONAL SALE UP TO 50% • SEASONAL SALE UP TO 50% • SEASONAL SALE UP TO 50%
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row align-items-center">
+        <div class="col-lg-6 text-center mb-5 mb-lg-0">
+            <div class="promo-decor-wrap">
+                <img src="{% static 'promo_model.png' %}" class="promo-model-img" alt="Brightening Serum">
+            </div>
+        </div>
+        <div class="col-lg-6 ps-lg-5">
+            <h2 class="display-5 fw-bold" style="font-family: serif;">Our Most Loved Serum</h2>
+            <h3 class="mb-4">NOW with <span style="color: #880916;">50% OFF</span></h3>
+
+            <p class="text-muted mb-4" style="font-size: 1.1rem; line-height: 1.6;">
+                Our best-selling serum is here to transform your routine. With powerful brightening
+                and hydrating ingredients, it smooths, softens, and enhances radiance — all while
+                being gentle enough for daily use.
+            </p>
+
+            <div class="d-flex gap-3 align-items-center">
+                {% if featured_product %}
+                    <a href="{% url 'product_detail' featured_product.id %}" class="btn btn-outline-dark btn-rounded">
+                        Product Details
+                    </a>
+                    <a href="{% url 'add_to_cart' featured_product.id %}" class="btn btn-dark btn-rounded" style="background: #5d6d4e; border: none;">
+                        Add to cart <i class="fas fa-shopping-cart me-2"></i>
+                    </a>
+                {% else %}
+                    <button class="btn btn-outline-dark btn-rounded" disabled>Product Details</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% if promo_products %}
+<div class="container mt-5 pt-4">
+    <div class="row">
+        {% for promo in promo_products %}
+        <div class="col-lg-4 col-md-6 mb-4 d-flex">
+            <div class="card border-0 flex-fill position-relative p-4" style="border-radius: 25px; background: #ffffff; box-shadow: 0px 10px 20px rgba(0,0,0,0.05);">
+
+                <span class=" promo-discount-badge badge border-radius: 0px position-absolute " style="background-color: #880916; border-radius: 8px; padding: 6px 10px;">-{{ promo.discount_percent }}%</span>
+                <a href="{% url 'toggle_favorite' promo.product.id %}" class="wishlist-link">
+    <i class="{% if promo.product.id in user_favorite_ids %}fas active{% else %}far{% endif %} fa-heart position-absolute top-0 end-0 m-4"
+       style="cursor: pointer; font-size: 1.3rem; transition: all 0.3s ease; z-index: 10;
+       {% if promo.product.id in user_favorite_ids %}color: #CC857F;{% else %}color: #b5b5b5;{% endif %}">
+    </i>
+</a>
+
+                <div class="text-center py-4">
+                    <img src="{{ promo.product.image.url }}" class="img-fluid" style="height: 180px; object-fit: contain;" alt="{{ promo.product.name }}">
+                </div>
+
+                <div class="card-body d-flex flex-column text-center pt-0">
+                    <h6 class="fw-bold mb-2">{{ promo.product.name }}</h6>
+
+                    <div class="mb-3 small" style="color: #CC857F">
+                        <i class="fas fa-star"></i
+                        ><i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+
+                    <p class="mb-4">
+                        <span class="text-muted text-decoration-line-through me-2" style="font-size: 0.9rem;">{{ promo.product.price }} MKD</span>
+                        <span class="fw-bold" style="color: #000000; font-size: 1.1rem;">{{ promo.discounted_price|floatformat:0 }} MKD</span>
+                    </p>
+
+                    <div class="mt-auto">
+                        <a href="{% url 'add_to_cart' promo.product.id %}" class="btn w-100 py-2 text-white" style="border-radius: 12px; background: #5d6d4e; border: none;">
+                            Add to cart <i class="fas fa-shopping-cart ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const heartBtns = document.querySelectorAll('.wishlist-btn');
+
+    heartBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.classList.toggle('active');
+
+            if (this.classList.contains('active')) {
+                this.classList.replace('far', 'fas');
+            } else {
+                this.classList.replace('fas', 'far');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

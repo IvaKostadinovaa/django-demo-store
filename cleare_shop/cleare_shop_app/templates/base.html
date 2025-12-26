@@ -1,0 +1,128 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Cleare Skin</title>
+
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'bootstrap/css/style.css' %}" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg cleare-navbar">
+    <div class="container">
+        <a class="navbar-brand cleare-logo" href="{% url 'home' %}">Cléaré</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+<div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ms-auto me-auto">
+        <li class="nav-item">
+<a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+   href="{% url 'home' %}">
+   HOME
+</a>
+
+        </li>
+        <li class="nav-item">
+<a class="nav-link {% if request.resolver_match.url_name == 'products' %}active{% endif %}"
+   href="{% url 'products' %}">
+   PRODUCTS
+</a>        </li>
+        <li class="nav-item">
+<a class="nav-link {% if request.resolver_match.url_name == 'skin_test' %}active{% endif %}"
+   href="{% url 'skin_test' %}">
+   SKIN TEST
+</a>        </li>
+        <li class="nav-item">
+<a class="nav-link {% if request.resolver_match.url_name == 'promotions' %}active{% endif %}"
+   href="{% url 'promotions' %}">
+   PROMOTIONS
+</a>        </li>
+    </ul>
+
+    <div class="d-flex align-items-center gap-3">
+        {% if user.is_authenticated %}
+            <a href="{% url 'favorites' %}" class="nav-link p-0" title="Favorites">
+                <i class="far fa-heart fa-lg"></i>
+            </a>
+            <a href="{% url 'cart' %}" class="nav-link p-0" title="Cart">
+                <i class="fas fa-shopping-cart fa-lg"></i>
+            </a>
+            <a href="{% url 'profile' %}" class="nav-link p-0" title="My Profile">
+                <i class="fas fa-user fa-lg"></i>
+            </a>
+            <form method="post" action="{% url 'logout' %}" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="nav-link p-0 bg-transparent border-0" title="Logout">
+                    <i class="fas fa-sign-out-alt fa-lg"></i>
+                </button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}" class="nav-link p-0" title="Login">
+                <i class="far fa-heart fa-lg"></i>
+            </a>
+            <a href="{% url 'login' %}" class="nav-link p-0" title="Login">
+                <i class="fas fa-shopping-cart fa-lg"></i>
+            </a>
+            <a href="{% url 'login' %}" class="btn btn-sm btn-cleare px-3">Login</a>
+        {% endif %}
+    </div>
+</div>
+        </div>
+    </div>
+</nav>
+
+<div class="container my-5">
+    {% block content %}{% endblock %}
+</div>
+
+
+<footer class="cleare-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <span class="cleare-logo-footer">Cléaré</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-5 mb-4 mb-md-0">
+                <h5>About Cléaré</h5>
+                <p>At Cléaré, we believe beautiful skin begins with purity and care. Our premium skincare collection is crafted to cleanse, hydrate, and brighten, helping you reveal your natural radiance every day. With a focus on quality, simplicity, and refined formulas, Cleare brings clarity and confidence to your skincare routine.</p>
+            </div>
+
+            <div class="col-md-3 mb-4 mb-md-0">
+                <h5>Contact Us</h5>
+                <p>Info@clearebeauty.com</p>
+                <p>Mon–Fri: 9 AM – 5 PM</p>
+            </div>
+
+            <div class="col-md-4">
+                <h5>Follow Us</h5>
+                <p class="mb-3">Yes, we are social!</p>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/clearebeauty" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/clearebeauty" target="_blank" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

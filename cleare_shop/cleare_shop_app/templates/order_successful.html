@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 text-center">
+            <div class="card cleare-details-card p-5">
+
+                <i class="fas fa-check-circle cleare-success-icon mb-4"></i>
+
+                <h2 class="cleare-hero-title mb-2">Payment Successful</h2>
+                <p class="lead text-muted mb-4">Your order has been placed successfully!</p>
+
+                <p class="mb-1 cleare-text-color" style="font-weight: 600;">Order Number: {{ order_details.order_number }}</p>
+                <p class="mb-4 text-muted small">We've sent an email confirmation to your address.</p>
+
+                <div class="bg-light p-3 rounded mb-4" style="background-color: #fcf8f4 !important;">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Date:</span>
+                        <span class="cleare-text-color">{{ order_details.date }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted" style="font-weight: 600;">Total Paid:</span>
+                        <span class="cleare-price-total">{{ order_details.total|floatformat:2 }} MKD</span>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-3 mt-4">
+                    <a href="{% url 'products' %}" class="btn btn-cleare-checkout">Continue Shopping</a>
+                    <a href="{% url 'orders' %}" class="btn btn-outline-secondary cleare-back-btn">View Order Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

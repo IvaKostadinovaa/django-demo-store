@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .favorites-header {
+        padding: 60px 0 30px;
+        text-align: center;
+    }
+
+    .favorites-header h2 {
+        font-family: serif;
+        color: #5d6d4e;
+        font-weight: bold;
+    }
+
+    .card-favorite {
+        border-radius: 25px;
+        background: #ffffff;
+        box-shadow: 0px 10px 20px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease;
+        border: none;
+    }
+
+    .card-favorite:hover {
+        transform: translateY(-5px);
+    }
+
+    .remove-favorite {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        color: #CC857F;
+        font-size: 1.4rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+        transition: color 0.2s;
+    }
+
+    .remove-favorite:hover {
+        color: #880916;
+    }
+
+    .empty-state {
+        padding: 100px 0;
+        text-align: center;
+    }
+</style>
+
+<div class="container">
+    <div class="favorites-header">
+        <h2>Your Favorite Products</h2>
+    </div>
+
+    <div class="row">
+        {% if favorite_items %}
+            {% for product in favorite_items %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card card-favorite p-3 h-100 position-relative">
+
+                    <form action="{% url 'toggle_favorite' product.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="remove-favorite">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </form>
+
+                    <div class="text-center py-3">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" class="img-fluid" style="height: 150px; object-fit: contain;" alt="{{ product.name }}">
+                        {% else %}
+                            <img src="{% static 'placeholder.png' %}" class="img-fluid" style="height: 150px;">
+                        {% endif %}
+                    </div>
+
+                    <div class="card-body text-center d-flex flex-column">
+                        <h6 class="fw-bold">{{ product.name }}</h6>
+                        <p class="text-muted small mb-2">{{ product.category }}</p>
+                        <div class="product-price mb-3">
+    {% if product.has_discount %}
+        <span class="original-price" style="text-decoration: line-through; color: #888; font-size: 0.9rem;">
+            {{ product.price }} MKD
+        </span>
+        <span class="discounted-price" style="color: #000000; font-weight: bold; font-size: 1.1rem; margin-left: 8px;">
+            {{ product.discounted_price|floatformat:0 }} MKD
+        </span>
+    {% else %}
+        <span class="regular-price" style="color: #000000; font-weight: bold; font-size: 1.1rem;">
+            {{ product.price }} MKD
+        </span>
+    {% endif %}
+</div>
+                        <a href="{% url 'add_to_cart' product.id %}" class="btn btn-dark w-100 py-2 mt-2" style="border-radius: 12px; background: #5d6d4e; border: none;">
+                            Add to Cart
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12 empty-state">
+                <i class="far fa-heart mb-3 text-muted" style="font-size: 4rem; opacity: 0.3;"></i>
+                <h4>Your wishlist is empty</h4>
+                <p class="text-muted">Browse our products and click the heart to save them here!</p>
+                <a href="{% url 'products' %}" class="btn btn-outline-dark btn-rounded mt-3">Start Shopping</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

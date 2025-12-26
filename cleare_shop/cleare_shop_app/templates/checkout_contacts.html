@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+       <style>
+           .cleare-footer {
+        display: none !important;
+    }
+</style>
+
+<div class="container py-5">
+
+    <h2 class="cleare-hero-title text-center mb-5">CHECKOUT</h2>
+
+    <div class="row">
+        <div class="col-lg-7 mb-4">
+            <div class="card cleare-details-card p-4">
+                <form method="POST" action="{% url 'checkout_contacts' %}">
+                    {% csrf_token %}
+
+                    <h5 class="cleare-text-color mb-3 pb-2 border-bottom">Contact Details</h5>
+                    <div class="mb-3">
+                        <label class="form-label cleare-form-label">Email</label>
+                        <input type="email" name="email" class="form-control cleare-input" value="{{ request.user.email|default:'' }}" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label cleare-form-label">Full Name</label>
+                        <input type="text" name="full_name" class="form-control cleare-input" value="{{ request.user.get_full_name|default:'' }}" required>
+                    </div>
+
+                    <h5 class="cleare-text-color mb-3 pb-2 border-bottom mt-4">Shipping Address</h5>
+                    <div class="mb-3">
+                        <label class="form-label cleare-form-label">Address Line 1</label>
+                        <input type="text" name="address1" class="form-control cleare-input" placeholder="Street, number, building" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label cleare-form-label">City</label>
+                            <input type="text" name="city" class="form-control cleare-input" placeholder="Skopje" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label cleare-form-label">Country</label>
+                            <input type="text" name="country" class="form-control cleare-input" placeholder="North Macedonia" required>
+                        </div>
+                    </div>
+
+                    <h5 class="cleare-text-color mb-3 pb-2 border-bottom mt-4">Shipping Method</h5>
+
+                    <div class="form-check cleare-shipping-option mb-3 p-3 border rounded">
+                        <input class="form-check-input" type="radio" name="shipping_method" id="standard_shipping" value="standard" checked>
+                        <label class="form-check-label d-flex justify-content-between align-items-center w-100" for="standard_shipping">
+                            <div>
+                                <span class="cleare-text-color" style="font-weight: 600;">Standard Shipping (5-7 days)</span>
+                                <small class="d-block text-muted">Shipped via local post.</small>
+                            </div>
+                            <span class="cleare-price">
+                                {% if cart_subtotal >= 1500 %}
+                                    <span class="badge bg-success">FREE</span>
+                                {% else %}
+                                    50.00 MKD
+                                {% endif %}
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="form-check cleare-shipping-option mb-4 p-3 border rounded">
+                        <input class="form-check-input" type="radio" name="shipping_method" id="express_shipping" value="express">
+                        <label class="form-check-label d-flex justify-content-between align-items-center w-100" for="express_shipping">
+                            <div>
+                                <span class="cleare-text-color" style="font-weight: 600;">Express Shipping (3-5 days)</span>
+                                <small class="d-block text-muted">Shipped via courier.</small>
+                            </div>
+                            <span class="cleare-price">80.00 MKD</span>
+                        </label>
+                    </div>
+
+                <div class="d-flex justify-content-between align-items-center gap-3 mt-4 w-100">
+    <a href="{% url 'cart' %}" class="btn flex-grow-1 px-2 py-3"
+       style="border-radius: 50px; border: 1.5px solid #6b8459; color: #6b8459; font-weight: 600; text-decoration: none; text-align: center; white-space: nowrap;">
+        Back to Shopping Cart
+    </a>
+
+    <button type="submit" class="btn flex-grow-1 px-2 py-3"
+            style="border-radius: 50px; background-color: #6b8459; color: white; font-weight: 600; border: none; white-space: nowrap;">
+        Continue to Payment
+    </button>
+</div>
+                </form>
+            </div>
+        </div>
+<div class="col-lg-5">
+    <div class="card p-5 sticky-top" style="top: 20px; border-radius: 30px; border: 1px solid #e0e0e0; background-color: #fffcf7; color: #1a1a3d;">
+        <h5 class="cleare-text-color mb-4 border-bottom pb-2">Order Summary</h5>
+
+
+        <div class="d-flex justify-content-between mb-3">
+            <span class="text-muted">Price</span>
+            <span class="text-muted">{{ cart_subtotal|floatformat:0 }} MKD</span>
+        </div>
+
+        <div class="d-flex justify-content-between mb-3">
+            <span class="text-muted">Discount</span>
+            <span class="text-muted">{{ discount_amount|floatformat:0 }}/- MKD</span>
+        </div>
+
+
+        <hr style="width: 60%; border-top: 1px solid #dcdcdc; opacity: 1; margin: 25px 0;">
+
+      <div class="position-relative mb-5">
+    <input type="text"
+           placeholder="Coupon Code"
+           class="form-control"
+           value="{{ coupon_code|default:'' }}"
+           readonly
+           style="padding: 12px 15px; border-radius: 5px; border: 1px solid #fdf9ee; background: #fdf9ee; font-size: 0.9rem; color: #333; font-weight: 600;">
+    <i class="fas fa-tag" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #d1938e;"></i>
+</div>
+
+        <div class="d-flex justify-content-between align-items-center">
+            <span style="font-weight: 500; letter-spacing: 1px;">TOTAL</span>
+            <span style="font-weight: 500;">{{ cart_total_with_shipping|floatformat:0 }} MKD</span>
+        </div>
+    </div>
+</div>
+</div>
+
+</div>
+{% endblock %}
+

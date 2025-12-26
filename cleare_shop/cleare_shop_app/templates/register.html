@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #CED5C3;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .register-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 50px 0;
+    }
+
+    .register-title {
+        color: #677E53;
+        text-decoration: underline;
+        margin-bottom: 40px;
+        font-weight: bold;
+        font-size: 2.2rem;
+    }
+
+    .register-card {
+        background-color: #FDFBF3;
+        padding: 60px 50px;
+        border-radius: 80px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 800;
+        margin-bottom: 8px;
+        font-family: serif;
+        font-size: 1.1rem;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 15px 20px;
+        border: 1px solid #E0DED7;
+        border-radius: 15px;
+        background-color: #FDFBF3;
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        color: #999;
+    }
+
+    .btn-create {
+        background-color: #677E53;
+        color: white;
+        border: none;
+        padding: 15px;
+        width: 100%;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-top: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin: 30px 0;
+        color: #999;
+        font-size: 0.8rem;
+    }
+
+    .divider::before, .divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #E0DED7;
+    }
+
+    .divider:not(:empty)::before { margin-right: .5em; }
+    .divider:not(:empty)::after { margin-left: .5em; }
+
+    .social-icons {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    .social-btn {
+        flex: 1;
+        background: white;
+        border: 1px solid #E0DED7;
+        padding: 12px;
+        border-radius: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .social-btn:hover {
+        background-color: #f8f8f8;
+    }
+
+    .social-btn img {
+        height: 20px;
+    }
+    .social-icons a.social-btn {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease;
+}
+
+.social-icons a.social-btn:hover {
+    transform: translateY(-3px);
+    background-color: #f0f0f0;
+}
+</style>
+
+    {% if messages %}
+    {% for message in messages %}
+        <div style="color: red; text-align: center;">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+<div class="register-container">
+    <h1 class="register-title">Register To Our Site</h1>
+
+    <div class="register-card">
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="full_name" class="form-input" placeholder="Your first name and last name">
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" class="form-input" placeholder="Your email">
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <div style="position: relative;">
+                    <input type="password" name="password" class="form-input" placeholder="........">
+                    <span style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #999; cursor: pointer;">
+                        <i class="far fa-eye-slash"></i> </span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-create">Create account</button>
+        </form>
+
+      <div class="divider">Or Register with</div>
+
+<div class="social-icons">
+    <a href="https://www.facebook.com/vashata-strana" class="social-btn" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" alt="Facebook">
+    </a>
+
+    <a href="https://accounts.google.com" class="social-btn" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google">
+    </a>
+
+    <a href="https://appleid.apple.com" class="social-btn" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple">
+    </a>
+</div>
+</div>
+</div>
+{% endblock %}

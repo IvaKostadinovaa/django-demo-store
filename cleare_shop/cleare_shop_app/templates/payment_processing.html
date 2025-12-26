@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cleare - Payment Status</title>
+    <style>
+        body {
+            background-color: #fffcf7;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .status-container {
+            text-align: center;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        .success-icon-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+
+        .bg-circles {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            border: 1px solid #e0ddd5;
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .bg-circles::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: -20px;
+            width: 150px;
+            height: 150px;
+            border: 1px solid #e0ddd5;
+            border-radius: 50%;
+        }
+
+        .main-icon {
+            position: relative;
+            z-index: 1;
+            font-size: 80px;
+            color: #6b8459;
+        }
+
+        .status-title {
+            color: #6b8459;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .status-text {
+            color: #8a8a8a;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .custom-progress {
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 30px;
+        }
+
+        .custom-progress-bar {
+            background-color: #6b8459;
+            height: 100%;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        #success-screen {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="status-container">
+
+        <div id="processing-screen">
+            <div class="mb-4">
+                <img src="https://i.gifer.com/ZKZg.gif" alt="Processing" width="80">
+            </div>
+            <h3 class="status-title">Payment processing</h3>
+            <p class="status-text">Please wait while we process money from your bank account.</p>
+
+            <div class="custom-progress">
+                <div id="progress-bar" class="custom-progress-bar"></div>
+            </div>
+        </div>
+
+        <div id="success-screen">
+            <div class="success-icon-wrapper">
+                <div class="bg-circles"></div>
+                <div class="main-icon">
+                    <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <h3 class="status-title">Payment Successful!</h3>
+            <p class="status-text">
+                Your order has been placed.<br>
+                We'll send you an email with your order details!
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const processing = document.getElementById('processing-screen');
+            const success = document.getElementById('success-screen');
+            const progressBar = document.getElementById('progress-bar');
+
+            let width = 0;
+            let timeElapsed = 0;
+            const totalTime = 5000;
+            const intervalTime = 50;
+
+            let interval = setInterval(function() {
+                timeElapsed += intervalTime;
+                width = (timeElapsed / totalTime) * 100;
+
+                if (width >= 100) {
+                    progressBar.style.width = '100%';
+                    clearInterval(interval);
+
+                    setTimeout(showSuccess, 500);
+                } else {
+                    progressBar.style.width = width + '%';
+                }
+            }, intervalTime);
+
+            function showSuccess() {
+                processing.style.display = 'none';
+                success.style.display = 'block';
+
+                setTimeout(function() {
+                    window.location.href = "{% url 'products' %}";
+                }, 5000);
+            }
+        });
+    </script>
+
+</body>
+</html>

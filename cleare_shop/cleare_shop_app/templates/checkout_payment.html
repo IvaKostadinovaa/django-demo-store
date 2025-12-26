@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .cleare-footer {
+        display: none !important;
+    }
+    .btn-cleare-checkout {
+        border-radius: 50px;
+        background-color: #6b8459;
+        color: white;
+        font-weight: 600;
+        padding: 12px 30px;
+        border: none;
+    }
+    .btn-cleare-checkout:hover {
+        background-color: #556b46;
+        color: white;
+    }
+</style>
+
+<div class="container py-5">
+    <h2 class="cleare-hero-title text-center mb-5">Payment</h2>
+
+    <div class="row">
+        <div class="col-lg-7 mb-4">
+            <div class="card cleare-details-card p-4">
+                <form method="POST" action="{% url 'checkout_payment' %}">
+                    {% csrf_token %}
+
+                    <h5 class="cleare-text-color mb-4 pb-2 border-bottom">Payment Method</h5>
+
+                    <div class="form-check cleare-payment-option mb-4 p-3 border">
+                        <input class="form-check-input" type="radio" name="payment_method" id="cash_on_delivery" value="cod" checked>
+                        <label class="form-check-label d-flex justify-content-between align-items-center" for="cash_on_delivery">
+                            <div>
+                                <h6 class="mb-0 cleare-text-color">Cash on Delivery (COD)</h6>
+                                <small class="text-muted">Pay for your order when it arrives.</small>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="form-check cleare-payment-option mb-4 p-3 border">
+                        <input class="form-check-input" type="radio" name="payment_method" id="credit_card" value="card">
+                        <label class="form-check-label d-flex justify-content-between align-items-center" for="credit_card">
+                            <div>
+                                <h6 class="mb-0 cleare-text-color">Pay with Debit / Credit Card</h6>
+                                <small class="text-muted">Safe money transfer using your bank account.</small>
+                            </div>
+                            <i class="fab fa-cc-visa fa-2x text-muted"></i>
+                        </label>
+                    </div>
+
+                    <div id="card_details_section" class="p-3 mt-3 border rounded" style="background-color: #fcf8f4; border-color: #e0e0e0;">
+                        <h6 class="cleare-text-color mb-3">Card Details</h6>
+
+                        <div class="mb-3">
+                            <label class="form-label cleare-form-label small">Card Number</label>
+                            <input type="text" name="card_number" class="form-control cleare-input" placeholder="XXXX XXXX XXXX XXXX">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label cleare-form-label small">Expiration Date</label>
+                                <input type="text" name="expiry_date" class="form-control cleare-input" placeholder="MM/YY">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label cleare-form-label small">CVV</label>
+                                <input type="text" name="cvv" class="form-control cleare-input" placeholder="XXX">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-5">
+                        <a href="{% url 'checkout_contacts' %}" class="btn btn-outline-secondary" style="border-radius: 50px; padding: 12px 30px;">Back</a>
+                        <button type="submit" id="submit-btn" class="btn btn-cleare-checkout">Place Order</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card p-5 sticky-top" style="top: 20px; border-radius: 30px; border: 1px solid #e0e0e0; background-color: #fffcf7; color: #1a1a3d;">
+                <h5 class="cleare-text-color mb-4 border-bottom pb-2">Order Summary</h5>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-muted">Price</span>
+                    <span class="text-muted">{{ cart_subtotal|floatformat:0 }} MKD</span>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-muted">Discount</span>
+                    <span class="text-muted">{{ discount_amount|floatformat:0 }}/- MKD</span>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-muted">Shipping</span>
+                    <span class="text-muted">
+                        {% if shipping_fee == 0 %} FREE {% else %} {{ shipping_fee|floatformat:0 }} MKD {% endif %}
+                    </span>
+                </div>
+
+                <hr style="width: 60%; border-top: 1px solid #dcdcdc; opacity: 1; margin: 25px 0;">
+
+                <div class="position-relative mb-5">
+                    <input type="text" placeholder="Coupon Code" class="form-control"
+                           value="{{ coupon_code|default:'' }}" readonly
+                           style="padding: 12px 15px; border-radius: 5px; border: 1px solid #dcdcdc; background: #f9f9f9; font-size: 0.9rem; color: #888;">
+                    <i class="fas fa-tag" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #1a1a3d;"></i>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <span style="font-weight: 500; letter-spacing: 1px;">TOTAL</span>
+                    <span style="font-weight: 500;">{{ cart_total_with_shipping|floatformat:0 }} MKD</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const cardRadio = document.getElementById('credit_card');
+        const codRadio = document.getElementById('cash_on_delivery');
+        const cardDetails = document.getElementById('card_details_section');
+        const submitBtn = document.getElementById('submit-btn');
+        const cardInputs = cardDetails.querySelectorAll('input');
+
+        function updateUI() {
+            if (cardRadio.checked) {
+                cardDetails.style.display = 'block';
+                submitBtn.innerText = 'Complete Payment';
+                cardInputs.forEach(input => input.setAttribute('required', ''));
+            } else {
+                cardDetails.style.display = 'none';
+                submitBtn.innerText = 'Place Order';
+                cardInputs.forEach(input => input.removeAttribute('required'));
+            }
+        }
+
+        updateUI();
+
+        cardRadio.addEventListener('change', updateUI);
+        codRadio.addEventListener('change', updateUI);
+    });
+</script>
+{% endblock %}

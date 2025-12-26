@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <style>
+
+.form-control {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.form-control:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: #FDF9EE !important;
+}
+
+.product-filter-bar .d-flex.border {
+    border-color: #e0e0e0 !important;
+}
+    .wishlist-btn.active {
+    color: #CC857F !important;
+}
+
+.wishlist-btn:hover {
+    transform: scale(1.2);
+    color: #CC857F;
+}
+    </style>
+
+<div class="products-header">
+    <h2 class="cleare-hero-title" style="font-size: 2.5rem;">Our Products</h2>
+    <p>📦 FREE SHIPPING on orders over 1500 MKD!</p>
+</div>
+
+<div class="product-filter-bar position-relative">
+    <div class="d-flex align-items-center w-100 border rounded-pill px-3 py-2 ">
+        <form method="get" class="d-flex flex-grow-1 align-items-center">
+            <i class="fas fa-search text-muted me-2"></i>
+            <input type="text" name="q" class="form-control   " style="background: #FDF9EE" placeholder="Search products..." value="{{ request.GET.q|default:'' }}">
+            <button type="submit" class="d-none">Search</button>
+        </form>
+
+        <div class="vr mx-2"></div> <div class="dropdown">
+            <button class="btn btn-link text-muted p-0" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-sliders-h"></i>
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end p-4 border-0  mt-3 shadow-none" aria-labelledby="filterDropdown" style="width: 280px; border-radius: 20px; background-color: #faf9f6;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="fw-bold h5 mb-0">Filters</span>
+                    <i class="fas fa-chevron-up small"></i>
+                </div>
+
+     <div class="mb-3">
+    <p class="fw-bold mb-2">Category</p>
+    {% with skin=request.GET.skin q=request.GET.q %}
+    <a href="?category=Cleanser{% if skin %}&skin={{ skin }}{% endif %}{% if q %}&q={{ q }}{% endif %}"
+       class="d-block text-decoration-none mb-1 {% if request.GET.category == 'Cleanser' %}text-danger{% else %}text-muted{% endif %}">Cleanser</a>
+
+    <a href="?category=Serum{% if skin %}&skin={{ skin }}{% endif %}{% if q %}&q={{ q }}{% endif %}"
+       class="d-block text-decoration-none mb-1 {% if request.GET.category == 'Serum' %}text-danger{% else %}text-muted{% endif %}">Serum</a>
+
+    <a href="?category=Cream{% if skin %}&skin={{ skin }}{% endif %}{% if q %}&q={{ q }}{% endif %}"
+       class="d-block text-decoration-none mb-1 {% if request.GET.category == 'Cream' %}text-danger{% else %}text-muted{% endif %}">Cream</a>
+
+    <a href="?category=Toner{% if skin %}&skin={{ skin }}{% endif %}{% if q %}&q={{ q }}{% endif %}"
+       class="d-block text-decoration-none mb-1 {% if request.GET.category == 'Toner' %}text-danger{% else %}text-muted{% endif %}">Toner</a>
+    {% endwith %}
+</div>
+
+
+         <div class="mb-3">
+    <p class="fw-bold mb-2">Skin type</p>
+    <div class="d-flex flex-wrap gap-2">
+        {% with cat=request.GET.category q=request.GET.q %}
+        <a href="?skin=oily{% if cat %}&category={{ cat }}{% endif %}{% if q %}&q={{ q }}{% endif %}"
+           class="text-decoration-none small {% if request.GET.skin == 'oily' %}text-danger{% else %}text-muted{% endif %}">Oily</a>
+
+        <a href="?skin=dry{% if cat %}&category={{ cat }}{% endif %}{% if q %}&q={{ q }}{% endif %}"
+           class="text-decoration-none small {% if request.GET.skin == 'dry' %}text-danger{% else %}text-muted{% endif %}">Dry</a>
+
+        <a href="?skin=combination{% if cat %}&category={{ cat }}{% endif %}{% if q %}&q={{ q }}{% endif %}"
+           class="text-decoration-none small {% if request.GET.skin == 'combination' %}text-danger{% else %}text-muted{% endif %}">Combination</a>
+
+        <a href="?skin=sensitive{% if cat %}&category={{ cat }}{% endif %}{% if q %}&q={{ q }}{% endif %}"
+           class="text-decoration-none small {% if request.GET.skin == 'sensitive' %}text-danger{% else %}text-muted{% endif %}">Sensitive</a>
+
+        <a href="?skin=normal{% if cat %}&category={{ cat }}{% endif %}{% if q %}&q={{ q }}{% endif %}"
+           class="text-decoration-none small {% if request.GET.skin == 'normal' %}text-danger{% else %}text-muted{% endif %}">Normal</a>
+        {% endwith %}
+    </div>
+</div>
+<div>
+    <p class="fw-bold mb-2">Prices</p>
+    {% with cat=request.GET.category skin=request.GET.skin %}
+    <a href="?min_price=0&max_price=50{% if cat %}&category={{ cat }}{% endif %}{% if skin %}&skin={{ skin }}{% endif %}"
+       class="d-block text-decoration-none small mb-1 {% if request.GET.max_price == '50' %}text-danger{% else %}text-muted{% endif %}">$0-$50</a>
+
+    <a href="?min_price=100&max_price=150{% if cat %}&category={{ cat }}{% endif %}{% if skin %}&skin={{ skin }}{% endif %}"
+       class="d-block text-decoration-none small mb-1 {% if request.GET.min_price == '100' %}text-danger{% else %}text-muted{% endif %}">$100-$150</a>
+    {% endwith %}
+</div>
+
+
+
+            </ul>
+        </div>
+
+        {% if request.GET.q or request.GET.category or request.GET.skin %}
+            <a href="{% url 'products' %}" class="btn btn-link text-muted p-0 ms-2">
+                <i class="fas fa-times"></i>
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row mt-5">
+  {% for p in products %}
+<div class="col-lg-4 col-md-6 mb-4 d-flex">
+    <div class="card product-card flex-fill position-relative">
+
+        {% if p.tag %}
+            <span class="badge cleare-tag position-absolute top-0 start-0 m-3">{{ p.tag }}</span>
+        {% endif %}
+
+
+       <a href="{% url 'toggle_favorite' p.id %}" class="wishlist-link">
+        <i class="{% if p.id in user_favorite_ids %}fas active{% else %}far{% endif %} fa-heart position-absolute top-0 end-0 m-4"
+           style="cursor: pointer; font-size: 1.3rem; transition: all 0.3s ease; z-index: 10;
+           {% if p.id in user_favorite_ids %}color: #CC857F;{% else %}color: #b5b5b5;{% endif %}">
+        </i>
+    </a>
+
+        {% if p.has_discount %}
+            <span class="position-absolute top-0 start-0 m-4"
+      style="background-color: #880916; color: white; border-radius: 0px; padding: 5px 10px; font-weight: bold; z-index: 10;">
+    -{{ p.discount_percent }}%
+</span>
+        {% endif %}
+
+        <div class="text-center position-relative">
+             <img src="{{ p.image.url }}" class="card-img-top" alt="{{ p.name }}">
+        </div>
+
+        <div class="card-body d-flex flex-column text-center pt-0">
+<h5 class="product-title mt-2">
+    <a href="{% url 'product_detail' p.id %}" style="text-decoration: none; color: inherit;">
+        {{ p.name }}
+    </a>
+</h5>            <p class="product-description">{{ p.description }}</p>
+
+            <div class="product-rating mb-2">
+                <i class="fas fa-star " style="color: #CC857F" ></i>
+                <i class="fas fa-star"  style="color: #CC857F"></i>
+                <i class="fas fa-star "  style="color: #CC857F"></i>
+                <i class="fas fa-star " style="color: #CC857F"></i>
+                <i class="far fa-star "  style="color: #CC857F"></i>
+            </div>
+
+            <div class="product-price mb-3">
+                {% if p.has_discount %}
+                    <span class="original-price" style="text-decoration: line-through; color: #888; font-size: 0.9rem;">
+                        {{ p.price }} MKD
+                    </span>
+                    <span class="discounted-price" style="color: #000000; font-weight: bold; font-size: 1.1rem; margin-left: 8px;">
+                        {{ p.discounted_price|floatformat:0 }} MKD
+                    </span>
+                {% else %}
+                    <span class="regular-price"  style="color: #000000; font-weight: bold; font-size: 1.1rem;">
+                        {{ p.price }} MKD
+                    </span>
+                {% endif %}
+            </div>
+
+            <div class="mt-auto">
+               <div class="mt-auto">
+    {% if user.is_authenticated %}
+        <a href="{% url 'add_to_cart' p.id %}" class="btn btn-sm"
+           style="width: 100%; max-width: 250px; padding: 0.6rem 1rem; background-color: #5d6d4e; color: white; border-radius: 10px; border: none; font-weight: 500;">
+           Add to cart <i class="fas fa-shopping-cart ms-2"></i>
+        </a>
+    {% else %}
+        <a href="{% url 'login' %}?next={% url 'add_to_cart' p.id %}" class="btn btn-sm"
+           style="width: 100%; max-width: 250px; padding: 0.6rem 1rem; background-color: #5d6d4e; color: white; border-radius: 10px; border: none; font-weight: 500;">
+           Add to cart <i class="fas fa-shopping-cart ms-2"></i>
+        </a>
+    {% endif %}
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% empty %}
+<div class="col-12 text-center">
+    <p class="text-muted">No products found matching your criteria.</p>
+</div>
+{% endfor %}
+</div>
+
+
+{% endblock %}

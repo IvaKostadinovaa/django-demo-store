@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #CED5C3;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .login-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 80vh;
+    }
+
+    .login-title {
+        color: #677E53;
+        text-decoration: underline;
+        margin-bottom: 30px;
+        font-weight: bold;
+        font-size: 2rem;
+    }
+
+    .login-card {
+        background-color: #FDF9EE;
+        padding: 50px;
+        border-radius: 60px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 450px;
+        text-align: left;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 800;
+        margin-bottom: 10px;
+        font-family: serif;
+    }
+
+    .form-control-custom {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #FDF9EE;
+        border-radius: 10px;
+        background-color: #FDF9EE;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .btn-login {
+        background-color: #677E53;
+        color: white;
+        border: none;
+        padding: 12px;
+        width: 100%;
+        border-radius: 25px;
+        font-weight: bold;
+        margin-top: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-login:hover {
+        background-color: #677E53;
+    }
+
+    .register-link {
+        margin-top: 25px;
+        text-align: left;
+        font-size: 0.9rem;
+        color: #333;
+    }
+
+    .register-link a {
+        color: #677E53;
+        font-weight: bold;
+        text-decoration: none;
+    }
+</style>
+
+<div class="login-container">
+    <h1 class="login-title">Login To Our Site</h1>
+
+    <div class="login-card">
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Your Email</label>
+                <input type="email" name="username" class="form-control-custom" placeholder="Enter Your Email" required>
+            </div>
+
+            <div class="form-group">
+                <label>Your Password</label>
+                <input type="password" name="password" class="form-control-custom" placeholder="Enter Your Password" required>
+            </div>
+
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+
+        <div class="register-link">
+            Don't have an account? <a href="/register">Register</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

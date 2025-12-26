@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="container py-5">
+    <h2 class="cleare-hero-title text-center mb-5">Cart</h2>
+
+    <div class="card cleare-details-card p-4 mb-5">
+
+        <div class="table-responsive">
+            <table class="table align-middle cleare-cart-table">
+                <thead>
+                    <tr class="cleare-table-header border-0" >
+                        <th scope="col" class="py-3 border-0" style="background: #FDF9EE">Product</th>
+                        <th scope="col" class="py-3 text-center" style="background: #FDF9EE">Price</th>
+                        <th scope="col" class="py-3 text-center" style="background: #FDF9EE">Quantity</th>
+                        <th scope="col" class="py-3 text-end" style="background: #FDF9EE">Subtotal</th>
+                        <th scope="col" class="py-3 text-center" style="background: #FDF9EE" ></th> </tr>
+                </thead>
+                <tbody>
+
+                    {% for item in cart_items %}
+                    <tr class="cleare-cart-row">
+                        <td class="product-info d-flex align-items-center" style="background: #FDF9EE">
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="me-4 cleare-product-img">
+                            <div>
+                                <h6 class="mb-0 cleare-text-color" style="font-weight: 500;">{{ item.product.name }}</h6>
+                            </div>
+                        </td>
+                        <td class="text-center cleare-price" style="background: #FDF9EE">{{ item.product.price }} MKD</td>
+                        <td class="text-center" style="background: #FDF9EE">
+                            <div class="input-group input-group-sm cleare-quantity-group mx-auto">
+                                <button class="btn btn-outline-secondary cleare-qty-btn" type="button" data-action="decrement" data-product-id="{{ item.product.id }}"><i class="fas fa-minus"></i></button>
+                                <input type="text" class="form-control text-center cleare-qty-input" value="{{ item.quantity }}" readonly>
+                                <button class="btn btn-outline-secondary cleare-qty-btn" type="button" data-action="increment" data-product-id="{{ item.product.id }}"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </td>
+                        <td class="text-end cleare-subtotal" style="background: #FDF9EE">{{ item.subtotal }} MKD</td>
+                        <td class="text-center" style="background: #FDF9EE">
+                            </td>
+                    </tr>
+                    {% empty %}
+                    <tr class="cleare-cart-row">
+                        <td colspan="5" class="text-center p-5 text-muted">Your cart is empty.</td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+  <h5 class="cleare-text-color mb-4">Recommended products for you:</h5>
+<div class="row mb-5">
+    {% for product in recommendations %}
+    <div class="col-md-6 mb-3">
+        <div class="card cleare-recommendation-card p-3 d-flex flex-row align-items-center">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 80px; height: 80px; object-fit: contain;" class="me-4">
+            <div>
+                <h6 class="mb-1 cleare-text-color">{{ product.name }}</h6>
+                <p class="small text-muted mb-1">{{ product.category|default:"Skincare" }}<br>For your skin type</p>
+                <p class="mb-2">
+                    <span class="cleare-price" style="font-weight: 600;">{{ product.price }} MKD</span>
+                </p>
+
+                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-sm cleare-add-cart-btn mt-2">
+                    <i class="fas fa-shopping-cart me-2"></i>Add to cart
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-muted ps-3">No further recommendations at this time.</p>
+    {% endfor %}
+</div>
+
+    <div class="row justify-content-end">
+        <div class="col-lg-6 col-md-8">
+            <div class="card p-4 cleare-details-card">
+
+               <h6 class="cleare-text-color mb-3">Apply Coupon</h6>
+<div class="input-group mb-4">
+    <input type="text" id="coupon-input" class="form-control cleare-input" placeholder="Enter coupon here">
+    <button class="btn btn-outline-secondary" type="button" id="apply-coupon-btn">Apply</button>
+</div>
+
+                <div class="d-flex justify-content-between mt-2">
+                    <span class="cleare-text-color" style="font-weight: 600;">Total Amount:</span>
+                    <span class="cleare-price-total">{{ cart.total_amount }} MKD</span>
+                </div>
+
+                <hr class="my-4">
+
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'products' %}" class="btn btn-outline-secondary cleare-back-btn">Back</a>
+                    <a href="{% url 'checkout_contacts' %}" class="btn btn-cleare-checkout">Checkout now</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+    <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    const qtyButtons = document.querySelectorAll('.cleare-qty-btn');
+
+    qtyButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.getAttribute('data-product-id');
+            const action = this.getAttribute('data-action');
+
+            fetch(`/update-cart/${productId}/${action}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                }
+            });
+        });
+    });
+});
+const applyBtn = document.getElementById('apply-coupon-btn');
+    if (applyBtn) {
+        applyBtn.addEventListener('click', function() {
+            const couponInput = document.getElementById('coupon-input');
+            const couponCode = couponInput.value;
+
+            fetch('{% url "apply_coupon" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 'coupon_code': couponCode })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Coupon applied: " + data.coupon);
+                } else {
+                    alert("Error applying coupon.");
+                }
+            });
+        });
+    }
+</script>
+{% endblock %}
+
